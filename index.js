@@ -28,7 +28,7 @@ io.on('connection', function (socket) {
   });
 });
 
-let port = 5000;
+let port = 2501;
 http.listen(port, function(){
   console.log('listening on *:' + port);
 });
