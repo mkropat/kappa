@@ -1,26 +1,27 @@
 <!doctype html>
 <html>
   <head>
-    <title>mlk chat</title>
-    <style>
-      form, form * { margin: 0; padding: 0; box-sizing: border-box; }
-      body { font: 13px Helvetica, Arial; }
-      form { background: #000; padding: 3px; position: fixed; bottom: 0; width: 100%; }
-      form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
-      form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-      #messages { list-style-type: none; margin: 0; padding: 0; }
-      #messages li { padding: 5px 10px; }
-      #messages li:nth-child(odd) { background: #eee; }
-    </style>
+    <title>kappa</title>
+    <link href="ui/ui.css" rel="stylesheet">
   </head>
   <body>
-    <ul id="messages">
-    </ul>
-    <form action="">
-      <input autofocus id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div class="main">
+      <canvas id="screen" width="640" height="480" tabindex="0"></canvas>
+      <ul id="messages"></ul>
+      <form action="">
+        <input id="m" autocomplete="off" /><button>Send</button>
+      </form>
+    </div>
+    <div class="sidebar">
+      <ul>
+        <li>fps: <span id="fps"></span></li>
+        <li>x: <span id="x"></span></li>
+        <li>y: <span id="y"></span></li>
+      </ul>
+    </div>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="ui/ui.js"></script>
     <script>
       var socket = io();
       document.querySelector('form').addEventListener('submit', function (e) {
@@ -32,7 +33,9 @@
       socket.on('chat message', function (msg) {
         var li = document.createElement('li');
         li.textContent = msg;
-        document.getElementById('messages').appendChild(li);
+        var messages = document.getElementById('messages');
+        messages.insertBefore(li, messages.firstChild);
+        //document.getElementById('messages').appendChild(li);
       });
     </script>
   </body>
