@@ -11,6 +11,7 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+var messageHistorySize = 10;
 var messages = [];
 
 io.on('connection', function (socket) {
@@ -23,6 +24,8 @@ io.on('connection', function (socket) {
   socket.on('chat message', function (msg) {
     console.log('message:', msg);
     messages.push(msg);
+    if (messages.length > messageHistorySize)
+      messages = messages.slice(messages.length - messageHistorySize);
     io.emit('chat message', msg);
   });
 
