@@ -17,6 +17,7 @@ canvas.addEventListener('keydown', function (e) {
   pressedKeys[e.key] = true;
   e.preventDefault();
 });
+
 canvas.addEventListener('keyup', function (e) {
   if (gameKeys.indexOf(e.key) < 0)
     return;
@@ -28,25 +29,24 @@ canvas.addEventListener('keyup', function (e) {
 });
 
 function drawGrid(originX, originY) {
+  originX = Math.floor(-1 * originX - canvas.width/2);
+  originY = Math.floor(originY + canvas.height/2);
+
   ctx.save();
 
-  ctx.translate(originX%128, originY%128);
+  var x, y;
 
-  for (var x = -128; x < canvas.width + 128; x += 32) {
-    if (x % 128 !== 0)
-      ctx.fillRect(x, -128, 1, canvas.height + 2*128);
-  }
-  for (var x = -1; x < canvas.width + 128; x += 128) {
-    ctx.fillRect(x, -128, 3, canvas.height + 2*128);
-  }
+  for (x = originX%32; x < canvas.width; x += 32)
+    ctx.fillRect(x, 0, 1, canvas.height);
 
-  for (var y = -128; y < canvas.height + 128; y += 32) {
-    if (y % 128 !== 0)
-      ctx.fillRect(-128, y, canvas.width + 2*128, 1);
-  }
-  for (var y = -1; y < canvas.height + 128; y += 128) {
-    ctx.fillRect(-128, y, canvas.width + 2*128, 3);
-  }
+  for (x = originX%128; x < canvas.width; x += 128)
+    ctx.fillRect(x - 1, 0, 3, canvas.height);
+
+  for (y = originY%32; y < canvas.height; y += 32)
+    ctx.fillRect(0, y, canvas.width, 1);
+
+  for (y = originY%128; y < canvas.height; y += 128)
+    ctx.fillRect(0, y-1, canvas.width, 3);
 
   ctx.restore();
 }
@@ -55,6 +55,7 @@ var x = 0;
 var y = 0;
 var frameCountSecond = 0;
 var frameCount = 0;
+
 function render(timestamp) {
   var currentSec = Math.floor(timestamp/1000);
   if (currentSec !== frameCountSecond)
@@ -67,17 +68,24 @@ function render(timestamp) {
     frameCount = 0;
   }
 
+  var move = 1;
+
   if (pressedKeys.w)
-    y += 1;
+    y += move;
   if (pressedKeys.a)
-    x += 1;
+    x -= move;
   if (pressedKeys.s)
-    y -= 1;
+    y -= move;
   if (pressedKeys.d)
-    x -= 1;
+    x += move;
 
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   drawGrid(x, y);
+
+  ctx.save();
+  ctx.fillStyle = "rgb(200,0,0)";
+  ctx.fillRect(canvas.width/2-8, canvas.height/2-8, 16, 16);
+  ctx.restore();
 
   frameCount++;
   requestAnimationFrame(render);
@@ -85,21 +93,3 @@ function render(timestamp) {
 
 render();
 
-ctx.save();
-ctx.fillStyle = "rgb(200,0,0)";
-ctx.fillRect (32, 32, 16, 16);
-ctx.restore();
-
-var map = [
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-  [1,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,1],
-  [1,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-  [1,0,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
-  [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,1],
-  [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
-];
