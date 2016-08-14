@@ -11,44 +11,55 @@
       fetch('/tiles')
         .then(r => r.json())
         .then(tiles => {
+          tiles.sort((l, r) => l.localeCompare(r, 'en', { sensitivity: 'base' }));
           tiles.forEach(t => {
-            var a = document.createElement('a');
-            a.href = '/tiles/' + t;
-            a.textContent = t;
-            a.addEventListener('click', e => {
-              while (this._container.firstChild)
-                this._container.removeChild(this._container.firstChild);
-
-              loadImage(e.target.href).then(img => {
-                var canvas = document.createElement('canvas');
-                canvas.height = img.naturalHeight;
-                canvas.width = img.naturalWidth;
-
-                var ctx = canvas.getContext('2d');
-                renderImage(ctx, img);
-
-                canvas.addEventListener('click', e => {
-                  var rect = canvas.getBoundingClientRect();
-                  var x = e.clientX - rect.left;
-                  var y = e.clientY - rect.top;
-
-                  renderImage(ctx, img, Math.floor(x/32), Math.floor(y/32));
-                });
-
-                this._container.appendChild(canvas);
-              });
-
-              e.preventDefault();
-            });
-
-            var li = document.createElement('li');
-            li.appendChild(a);
-
-            this._list.appendChild(li);
-          });
+            this._addTileLink('/tiles/' + t, t);
+          })
         });
     }
+
+    _addTileLink(url, title) {
+      var a = document.createElement('a');
+      a.href = url;
+      a.textContent = title;
+      a.addEventListener('click', this._containerClick.bind(this));
+
+      var li = document.createElement('li');
+      li.appendChild(a);
+
+      this._list.appendChild(li);
+    }
+
+    _containerClick(e) {
+      e.preventDefault();
+
+      removeChildren(this._container);
+
+      loadImage(e.target.href).then(img => {
+        var canvas = document.createElement('canvas');
+        canvas.height = img.naturalHeight;
+        canvas.width = img.naturalWidth;
+
+        var ctx = canvas.getContext('2d');
+        renderImage(ctx, img);
+
+        canvas.addEventListener('click', e => {
+          var rect = canvas.getBoundingClientRect();
+          var x = e.clientX - rect.left;
+          var y = e.clientY - rect.top;
+
+          renderImage(ctx, img, Math.floor(x/32), Math.floor(y/32));
+        });
+
+        this._container.appendChild(canvas);
+      });
+    }
   };
+
+  function removeChildren(node) {
+    while (node.firstChild)
+      node.removeChild(node.firstChild);
+  }
 
   function renderImage(ctx, imgTag, selectedBoxX, selectedBoxY) {
     ctx.clearRect(0, 0, imgTag.naturalWidth, imgTag.naturalHeight);
