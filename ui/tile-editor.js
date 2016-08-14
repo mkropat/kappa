@@ -16,7 +16,7 @@
           tiles.sort((l, r) => l.localeCompare(r, 'en', { sensitivity: 'base' }));
           tiles.forEach(t => {
             this._addTileLink('/tiles/' + t, t);
-          })
+          });
         });
     }
 
@@ -59,7 +59,7 @@
           this._selected = {
             x: Math.floor(x/32),
             y: Math.floor(y/32)
-          }
+          };
 
           this._renderImage(ctx, img);
         });
