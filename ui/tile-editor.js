@@ -18,13 +18,15 @@ fetch('/tiles')
           canvas.width = img.naturalWidth;
 
           var ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
+          renderImage(ctx, img);
 
-          for (var x = 0; x < canvas.width; x += 32)
-            ctx.fillRect(x, 0, 1, canvas.height);
+          canvas.addEventListener('click', e => {
+            var rect = canvas.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
 
-          for (var y = 0; y < canvas.height; y += 32)
-            ctx.fillRect(0, y, canvas.width, 1);
+            renderImage(ctx, img, Math.floor(x/32), Math.floor(y/32));
+          });
 
           imageContainer.appendChild(canvas);
         });
@@ -38,6 +40,24 @@ fetch('/tiles')
       list.appendChild(li);
     });
   });
+
+function renderImage(ctx, imgTag, selectedBoxX, selectedBoxY) {
+  ctx.clearRect(0, 0, imgTag.naturalWidth, imgTag.naturalHeight);
+  ctx.drawImage(imgTag, 0, 0);
+
+  for (var x = 0; x < imgTag.naturalWidth; x += 32)
+    ctx.fillRect(x, 0, 1, imgTag.naturalHeight);
+
+  for (var y = 0; y < imgTag.naturalHeight; y += 32)
+    ctx.fillRect(0, y, imgTag.naturalWidth, 1);
+
+  if (selectedBoxX !== undefined) {
+    ctx.save();
+    ctx.fillStyle = 'rgba(0, 0, 128, 0.4)'
+    ctx.fillRect(32*selectedBoxX, 32*selectedBoxY, 32, 32);
+    ctx.restore();
+  }
+}
 
 function loadImage(url) {
   return new Promise((res, rej) => {

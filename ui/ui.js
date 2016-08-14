@@ -83,7 +83,7 @@ function render(timestamp) {
   drawGrid(x, y);
 
   ctx.save();
-  ctx.fillStyle = "rgb(200,0,0)";
+  ctx.fillStyle = 'rgb(200,0,0)';
   ctx.fillRect(canvas.width/2-8, canvas.height/2-8, 16, 16);
   ctx.restore();
 
