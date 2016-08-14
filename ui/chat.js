@@ -1,13 +1,26 @@
-var socket = io();
-document.querySelector('form').addEventListener('submit', function (e) {
-  socket.emit('chat message', document.getElementById('m').value);
-  document.getElementById('m').value = '';
-  e.preventDefault();
-});
+(function () {
+  'use strict';
 
-socket.on('chat message', function (msg) {
-  var li = document.createElement('li');
-  li.textContent = msg;
-  var messages = document.getElementById('messages');
-  messages.insertBefore(li, messages.firstChild);
-});
+  window.ChatController = class ChatController {
+    constructor(socket, messageContainer, form) {
+      this._socket = socket;
+      this._messageContainer = messageContainer;
+      this._form = form;
+      this._input = form.querySelector('input');
+    }
+
+    init() {
+      this._form.addEventListener('submit', e => {
+        this._socket.emit('chat message', this._input.value);
+        this._input.value = '';
+        e.preventDefault();
+      });
+
+      this._socket.on('chat message', msg => {
+        var li = document.createElement('li');
+        li.textContent = msg;
+        this._messageContainer.insertBefore(li, this._messageContainer.firstChild);
+      });
+    }
+  };
+})();

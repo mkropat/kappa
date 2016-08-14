@@ -8,9 +8,9 @@
     <div class="main">
       <canvas id="screen" width="640" height="480" tabindex="0"></canvas>
 
-      <ul id="messages"></ul>
-      <form action="">
-        <input id="m" autocomplete="off" /><button>Send</button>
+      <ul id="chat-messages"></ul>
+      <form id="chat-form" action="">
+        <input autocomplete="off" /><button>Send</button>
       </form>
     </div>
     <div class="sidebar">
@@ -21,12 +21,30 @@
       </ul>
       <h3>Tiles</h3>
       <ul id="tile-list"></ul>
-      <div id="tile-image-container"></div>
+      <div id="tile-image"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="ui/ui.js"></script>
     <script src="ui/chat.js"></script>
     <script src="ui/tile-editor.js"></script>
+    <script>
+(function () {
+  'use strict';
+
+  var socket = io();
+
+  var chat = new ChatController(
+      socket,
+      document.getElementById('chat-messages'),
+      document.getElementById('chat-form'));
+  chat.init();
+
+  var selector = new TileSelector(
+      document.getElementById('tile-list'),
+      document.getElementById('tile-image'));
+  selector.init();
+})();
+    </script>
   </body>
 </html>
