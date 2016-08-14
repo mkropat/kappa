@@ -13,6 +13,9 @@
   let pressedKeys = {};
   let gameKeys = ['w', 'a', 's', 'd'];
 
+  let cameraX = 0;
+  let cameraY = 0;
+
   canvas.addEventListener('keydown', function (e) {
     if (gameKeys.indexOf(e.key) < 0)
       return;
@@ -29,6 +32,22 @@
       delete pressedKeys[e.key];
 
     e.preventDefault();
+  });
+
+  canvas.addEventListener('click', e => {
+    e.preventDefault();
+
+    let canvas = e.target;
+    let rect = canvas.getBoundingClientRect();
+
+    let x = e.clientX - rect.left;
+    let y = e.clientY - rect.top;
+
+    let absoluteX = cameraX + x - canvas.width/2;
+    let absoluteY = cameraY - y + canvas.height/2;
+
+    console.log('tileX', Math.floor(absoluteX/32))
+    console.log('tileY', Math.floor(absoluteY/32));
   });
 
   function drawGrid(originX, originY) {
@@ -63,8 +82,8 @@
     let currentSec = Math.floor(timestamp/1000);
     if (currentSec !== frameCountSecond)
     {
-      xinfo.innerText = x;
-      yinfo.innerText = y;
+      xinfo.innerText = cameraX;
+      yinfo.innerText = cameraY;
       fps.innerText = frameCount;
 
       frameCountSecond = currentSec;
@@ -74,16 +93,16 @@
     let move = 1;
 
     if (pressedKeys.w)
-      y += move;
+      cameraY += move;
     if (pressedKeys.a)
-      x -= move;
+      cameraX -= move;
     if (pressedKeys.s)
-      y -= move;
+      cameraY -= move;
     if (pressedKeys.d)
-      x += move;
+      cameraX += move;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawGrid(x, y);
+    drawGrid(cameraX, cameraY);
 
     ctx.save();
     ctx.fillStyle = 'rgb(200,0,0)';
