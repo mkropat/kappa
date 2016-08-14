@@ -1,17 +1,17 @@
 (function() {
   'use strict';
 
-  var canvas = document.getElementById('screen');
+  let canvas = document.getElementById('screen');
   canvas.focus();
 
-  var ctx = canvas.getContext('2d');
+  let ctx = canvas.getContext('2d');
 
-  var fps = document.getElementById('fps');
-  var xinfo = document.getElementById('x');
-  var yinfo = document.getElementById('y');
+  let fps = document.getElementById('fps');
+  let xinfo = document.getElementById('x');
+  let yinfo = document.getElementById('y');
 
-  var pressedKeys = {};
-  var gameKeys = ['w', 'a', 's', 'd'];
+  let pressedKeys = {};
+  let gameKeys = ['w', 'a', 's', 'd'];
 
   canvas.addEventListener('keydown', function (e) {
     if (gameKeys.indexOf(e.key) < 0)
@@ -37,7 +37,7 @@
 
     ctx.save();
 
-    var x, y;
+    let x, y;
 
     for (x = originX%32; x < canvas.width; x += 32)
       ctx.fillRect(x, 0, 1, canvas.height);
@@ -54,13 +54,13 @@
     ctx.restore();
   }
 
-  var x = 0;
-  var y = 0;
-  var frameCountSecond = 0;
-  var frameCount = 0;
+  let x = 0;
+  let y = 0;
+  let frameCountSecond = 0;
+  let frameCount = 0;
 
   function render(timestamp) {
-    var currentSec = Math.floor(timestamp/1000);
+    let currentSec = Math.floor(timestamp/1000);
     if (currentSec !== frameCountSecond)
     {
       xinfo.innerText = x;
@@ -71,7 +71,7 @@
       frameCount = 0;
     }
 
-    var move = 1;
+    let move = 1;
 
     if (pressedKeys.w)
       y += move;

@@ -17,7 +17,7 @@
       });
 
       this._socket.on('chat message', msg => {
-        var li = document.createElement('li');
+        let li = document.createElement('li');
         li.textContent = msg;
         this._messageContainer.insertBefore(li, this._messageContainer.firstChild);
       });

@@ -32,15 +32,15 @@
 (function () {
   'use strict';
 
-  var socket = io();
+  let socket = io();
 
-  var chat = new ChatController(
+  let chat = new ChatController(
       socket,
       document.getElementById('chat-messages'),
       document.getElementById('chat-form'));
   chat.init();
 
-  var selector = new TileSelector(
+  let selector = new TileSelector(
       document.getElementById('tile-list'),
       document.getElementById('tile-image'));
   selector.init();

@@ -28,7 +28,7 @@ form button {
   padding: 10px;
 }
 
-#messages {
+#chat-messages {
   list-style-type: none;
   margin: 0;
   padding: 0;
@@ -37,10 +37,10 @@ form button {
   overflow-y: scroll;
 }
 
-#messages li {
+#chat-messages li {
   padding: 5px 10px;
 }
-#messages li:nth-child(odd) {
+#chat-messages li:nth-child(odd) {
   background: #eee;
 }
 
@@ -54,6 +54,7 @@ form button {
 }
 .sidebar {
   display: table-cell;
+  padding-left: 15px;
   vertical-align: top;
 }
 
