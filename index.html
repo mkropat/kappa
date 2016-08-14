@@ -14,20 +14,18 @@
       </form>
     </div>
     <div class="sidebar">
-      <ul>
-        <li>fps: <span id="fps"></span></li>
-        <li>x: <span id="x"></span></li>
-        <li>y: <span id="y"></span></li>
-      </ul>
+      <div id="status-container"></div>
+
       <h3>Tiles</h3>
-      <ul id="tile-list"></ul>
-      <div id="tile-image"></div>
+      <ul id="tileset-list"></ul>
+      <div id="tilset-image"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="ui/ui.js"></script>
     <script src="ui/chat.js"></script>
     <script src="ui/tile-editor.js"></script>
+    <script src="ui/status-display.js"></script>
     <script>
 (function () {
   'use strict';
@@ -38,15 +36,20 @@
       socket,
       document.getElementById('chat-messages'),
       document.getElementById('chat-form'));
-  chat.init();
+
+  let status = new StatusDisplay(
+      document.getElementById('status-container'));
 
   let selector = new TileSelector(
-      document.getElementById('tile-list'),
-      document.getElementById('tile-image'));
-  selector.init();
+      document.getElementById('tileset-list'),
+      document.getElementById('tilset-image'));
 
   let screenController = new UiController(
-      document.getElementById('screen'));
+      document.getElementById('screen'),
+      status);
+
+  chat.init();
+  selector.init();
   screenController.init();
 })();
     </script>

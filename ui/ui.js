@@ -4,8 +4,10 @@
   let gameKeys = ['w', 'a', 's', 'd'];
 
   window.UiController = class UiController {
-    constructor(screen) {
+    constructor(screen, statusDisplay) {
       this._screen = screen;
+      this._statusDisplay = statusDisplay;
+
       this._ctx = screen.getContext('2d');
 
       this._pressedKeys = {};
@@ -57,16 +59,14 @@
     }
 
     _render(timestamp) {
-      let fps = document.getElementById('fps');
-      let xinfo = document.getElementById('x');
-      let yinfo = document.getElementById('y');
-
       let currentSec = Math.floor(timestamp/1000);
       if (currentSec !== this._frameCountSecond)
       {
-        xinfo.innerText = this._cameraX;
-        yinfo.innerText = this._cameraY;
-        fps.innerText = this._frameCount;
+        this._statusDisplay.render({
+          fps: this._frameCount,
+          cameraX: this._cameraX,
+          cameraY: this._cameraY
+        });
 
         this._frameCountSecond = currentSec;
         this._frameCount = 0;
