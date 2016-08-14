@@ -7,6 +7,7 @@
   <body>
     <div class="main">
       <canvas id="screen" width="640" height="480" tabindex="0"></canvas>
+
       <ul id="messages"></ul>
       <form action="">
         <input id="m" autocomplete="off" /><button>Send</button>
@@ -18,10 +19,14 @@
         <li>x: <span id="x"></span></li>
         <li>y: <span id="y"></span></li>
       </ul>
+      <h3>Tiles</h3>
+      <ul id="tile-list"></ul>
+      <div id="tile-image-container"></div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="ui/ui.js"></script>
     <script src="ui/chat.js"></script>
+    <script src="ui/tile-editor.js"></script>
   </body>
 </html>

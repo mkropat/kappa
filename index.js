@@ -1,14 +1,25 @@
 'use strict';
 
 var express = require('express');
+var fs = require('fs');
+
 var app = express();
+
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
 app.use('/ui', express.static('ui'));
+app.use('/tiles', express.static('tiles'));
 
-app.get('/', function(req, res){
+app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
+});
+
+app.get('/tiles', function (req, res) {
+  fs.readdir('tiles', function (err, entries) {
+    res.status(200)
+      .json(entries);
+  });
 });
 
 var messageHistorySize = 10;
