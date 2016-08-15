@@ -1,12 +1,17 @@
 (function() {
   'use strict';
 
+  let gridSize = 32;
+
   let gameKeys = ['w', 'a', 's', 'd'];
 
   window.UiController = class UiController {
-    constructor(screen, statusDisplay) {
+    constructor(screen, statusDisplay, tileSelector) {
       this._screen = screen;
       this._statusDisplay = statusDisplay;
+      this._tileSelector = tileSelector;
+
+      this._tiles = {};
 
       this._ctx = screen.getContext('2d');
 
@@ -51,8 +56,14 @@
         let absoluteX = this._cameraX + x - canvas.width/2;
         let absoluteY = this._cameraY - y + canvas.height/2;
 
-        console.log('tileX', Math.floor(absoluteX/32));
-        console.log('tileY', Math.floor(absoluteY/32));
+        var tile = this._tileSelector.selected;
+        if (tile === null)
+          return;
+
+        let gridX = Math.floor(absoluteX/gridSize);
+        let gridY = Math.floor(absoluteY/gridSize);
+        this._tiles[gridX + ',' + gridY] = tile;
+        console.log('setting tile at', gridX, gridY);
       });
 
       this._render();
@@ -86,6 +97,24 @@
       this._ctx.clearRect(0, 0, this._screen.width, this._screen.height);
       this._drawGrid();
 
+      let absoluteStartX = this._cameraX - this._screen.width/2;
+      let absoluteStartY = this._cameraY + this._screen.height/2;
+      let gridStartX = Math.floor(absoluteStartX / gridSize);
+      let gridStartY = Math.floor(absoluteStartY / gridSize);
+
+      for (let y = gridStartY; y > gridStartY - (this._screen.height/gridSize + 1); y--) {
+        for (let x = gridStartX; x < gridStartX + this._screen.width/gridSize + 1; x++) {
+          let tile = this._tiles[x + ',' + y];
+          if (tile) {
+            this._ctx.drawImage(tile.img,
+                tile.x, tile.y, gridSize, gridSize,
+                (x - gridStartX)*32 - (absoluteStartX + 1)%32 - (gridSize - 1),
+                (gridStartY - y - 1)*32 + (absoluteStartY%32),
+                gridSize, gridSize);
+          }
+        }
+      }
+
       this._ctx.save();
       this._ctx.fillStyle = 'rgb(200,0,0)';
       this._ctx.fillRect(this._screen.width/2-8, this._screen.height/2-8, 16, 16);
@@ -96,23 +125,24 @@
     }
 
     _drawGrid() {
-      let originX = Math.floor(-1 * this._cameraX - this._screen.width/2);
-      let originY = Math.floor(this._cameraY + this._screen.height/2);
+      let bigGridSize = gridSize*4;
+      let startX = Math.floor(-1*this._cameraX - this._screen.width/2) % bigGridSize;
+      let startY = Math.floor(this._cameraY + this._screen.height/2) % bigGridSize;
 
       this._ctx.save();
 
       let x, y;
 
-      for (x = originX%32; x < this._screen.width; x += 32)
+      for (x = startX%gridSize; x < this._screen.width; x += gridSize)
         this._ctx.fillRect(x, 0, 1, this._screen.height);
 
-      for (x = originX%128; x < this._screen.width; x += 128)
+      for (x = startX; x < this._screen.width; x += bigGridSize)
         this._ctx.fillRect(x - 1, 0, 3, this._screen.height);
 
-      for (y = originY%32; y < this._screen.height; y += 32)
+      for (y = startY%gridSize; y < this._screen.height; y += gridSize)
         this._ctx.fillRect(0, y, this._screen.width, 1);
 
-      for (y = originY%128; y < this._screen.height; y += 128)
+      for (y = startY; y < this._screen.height; y += bigGridSize)
         this._ctx.fillRect(0, y-1, this._screen.width, 3);
 
       this._ctx.restore();

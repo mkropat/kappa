@@ -21,9 +21,14 @@
     }
 
     get selected() {
-      return this._selected === null
-        ? null
-        : Object.assign({}, this._selected);
+      if (!this._selected)
+        return null;
+
+      return {
+        img: this._selected.img,
+        x: this._selected.x*32,
+        y: this._selected.y*32
+      };
     }
 
     _addTileLink(url, title) {
@@ -57,6 +62,7 @@
           let x = e.clientX - rect.left;
           let y = e.clientY - rect.top;
           this._selected = {
+            img: img,
             x: Math.floor(x/32),
             y: Math.floor(y/32)
           };

@@ -30,26 +30,27 @@
 (function () {
   'use strict';
 
-  let socket = io();
+  window.socket = io();
 
-  let chat = new ChatController(
+  window.chat  = new ChatController(
       socket,
       document.getElementById('chat-messages'),
       document.getElementById('chat-form'));
 
-  let status = new StatusDisplay(
+  window.statusDisplay = new StatusDisplay(
       document.getElementById('status-container'));
 
-  let selector = new TileSelector(
+  window.tileSelector = new TileSelector(
       document.getElementById('tileset-list'),
       document.getElementById('tilset-image'));
 
-  let screenController = new UiController(
+  window.screenController = new UiController(
       document.getElementById('screen'),
-      status);
+      statusDisplay,
+      tileSelector);
 
   chat.init();
-  selector.init();
+  tileSelector.init();
   screenController.init();
 })();
     </script>
