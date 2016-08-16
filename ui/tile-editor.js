@@ -2,9 +2,10 @@
   'use strict';
 
   window.TileSelector = class TileSelector {
-    constructor(list, container) {
+    constructor(list, container, gridSize) {
       this._list = list;
       this._container = container;
+      this._gridSize = gridSize || 32;
 
       this._selected = null;
     }
@@ -24,10 +25,15 @@
       if (!this._selected)
         return null;
 
+      let start = this._selected.start;
+      let end = this._selected.end || start;
+
       return {
         img: this._selected.img,
-        x: this._selected.x*32,
-        y: this._selected.y*32
+        x: Math.min(start.x, end.x)*this._gridSize,
+        y: Math.min(start.y, end.y)*this._gridSize,
+        width: (Math.abs(start.x - end.x) + 1)*this._gridSize,
+        height: (Math.abs(start.y - end.y) + 1)*this._gridSize
       };
     }
 
@@ -56,16 +62,36 @@
         let ctx = canvas.getContext('2d');
         this._renderImage(ctx, img);
 
-        canvas.addEventListener('click', e => {
+        canvas.addEventListener('mousedown', e => {
+          e.preventDefault();
+
           let rect = canvas.getBoundingClientRect();
 
           let x = e.clientX - rect.left;
           let y = e.clientY - rect.top;
           this._selected = {
             img: img,
-            x: Math.floor(x/32),
-            y: Math.floor(y/32)
+            start: {
+              x: Math.floor(x/this._gridSize),
+              y: Math.floor(y/this._gridSize)
+            }
           };
+
+          this._renderImage(ctx, img);
+        });
+
+        canvas.addEventListener('mouseup', e => {
+          let rect = canvas.getBoundingClientRect();
+
+          let x = e.clientX - rect.left;
+          let y = e.clientY - rect.top;
+
+          if (this._selected) {
+            this._selected.end = {
+              x: Math.floor(x/this._gridSize),
+              y: Math.floor(y/this._gridSize)
+            };
+          }
 
           this._renderImage(ctx, img);
         });
@@ -78,16 +104,23 @@
       ctx.clearRect(0, 0, imgTag.naturalWidth, imgTag.naturalHeight);
       ctx.drawImage(imgTag, 0, 0);
 
-      for (let x = 0; x < imgTag.naturalWidth; x += 32)
+      for (let x = 0; x < imgTag.naturalWidth; x += this._gridSize)
         ctx.fillRect(x, 0, 1, imgTag.naturalHeight);
 
-      for (let y = 0; y < imgTag.naturalHeight; y += 32)
+      for (let y = 0; y < imgTag.naturalHeight; y += this._gridSize)
         ctx.fillRect(0, y, imgTag.naturalWidth, 1);
 
-      if (this._selected !== null) {
+      let selectedRect = this.selected;
+      if (selectedRect !== null) {
         ctx.save();
+
         ctx.fillStyle = 'rgba(0, 0, 128, 0.4)';
-        ctx.fillRect(32*this._selected.x, 32*this._selected.y, 32, 32);
+        ctx.fillRect(
+          selectedRect.x,
+          selectedRect.y,
+          selectedRect.width,
+          selectedRect.height);
+
         ctx.restore();
       }
     }

@@ -56,14 +56,24 @@
         let absoluteX = this._cameraX + x - canvas.width/2;
         let absoluteY = this._cameraY - y + canvas.height/2;
 
-        var tile = this._tileSelector.selected;
+        let tile = this._tileSelector.selected;
         if (tile === null)
           return;
 
-        let gridX = Math.floor(absoluteX/gridSize);
-        let gridY = Math.floor(absoluteY/gridSize);
-        this._tiles[gridX + ',' + gridY] = tile;
-        console.log('setting tile at', gridX, gridY);
+        let selectedGridX = Math.floor(absoluteX/gridSize);
+        let selectedGridY = Math.floor(absoluteY/gridSize);
+
+        for (let x = 0; x < tile.width/gridSize; x++) {
+          for (let y = 0; y < tile.height/gridSize; y++) {
+            let gridX = selectedGridX + x;
+            let gridY = selectedGridY - y;
+            this._tiles[gridX + ',' + gridY] = {
+              img: tile.img,
+              x: tile.x + x*gridSize,
+              y: tile.y + y*gridSize
+            };
+          }
+        }
       });
 
       this._render();
