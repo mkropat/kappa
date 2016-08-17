@@ -64,8 +64,6 @@
         let selectedGridX = Math.floor(absoluteX/gridSize);
         let selectedGridY = Math.floor(absoluteY/gridSize);
 
-        var newTiles = {};
-
         this._imageLoader.load(tile.img).then(img => {
           for (let x = 0; x < tile.width/gridSize; x++) {
             for (let y = 0; y < tile.height/gridSize; y++) {
@@ -123,10 +121,10 @@
           let tile = this._tiles[x + ',' + y];
           if (tile) {
             this._ctx.drawImage(tile.img,
-                tile.x, tile.y, gridSize, gridSize,
-                (x - gridStartX)*32 - (absoluteStartX + 1)%32 - (gridSize - 1),
-                (gridStartY - y - 1)*32 + (absoluteStartY%32),
-                gridSize, gridSize);
+              tile.x, tile.y, gridSize, gridSize,
+              (x - gridStartX)*gridSize - mod(absoluteStartX, gridSize),
+              (gridStartY - y - 1)*gridSize + mod(absoluteStartY, gridSize),
+              gridSize, gridSize);
           }
         }
       }
@@ -164,4 +162,9 @@
       this._ctx.restore();
     }
   };
+
+  function mod(x, m) {
+    let r = x%m;
+    return r < 0 ? r + m : r;
+  }
 })();
