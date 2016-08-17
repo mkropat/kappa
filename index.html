@@ -26,13 +26,14 @@
     <script src="ui/chat.js"></script>
     <script src="ui/tile-editor.js"></script>
     <script src="ui/status-display.js"></script>
+    <script src="ui/ImageLoader.js"></script>
     <script>
 (function () {
   'use strict';
 
   window.socket = io();
 
-  window.chat  = new ChatController(
+  window.chat = new ChatController(
       socket,
       document.getElementById('chat-messages'),
       document.getElementById('chat-form'));
@@ -42,12 +43,14 @@
 
   window.tileSelector = new TileSelector(
       document.getElementById('tileset-list'),
-      document.getElementById('tilset-image'));
+      document.getElementById('tilset-image'),
+      imageLoader);
 
   window.screenController = new UiController(
       document.getElementById('screen'),
       statusDisplay,
-      tileSelector);
+      tileSelector,
+      imageLoader);
 
   chat.init();
   tileSelector.init();

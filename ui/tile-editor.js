@@ -2,9 +2,10 @@
   'use strict';
 
   window.TileSelector = class TileSelector {
-    constructor(list, container, gridSize) {
+    constructor(list, container, imageLoader, gridSize) {
       this._list = list;
       this._container = container;
+      this._imageLoader = imageLoader;
       this._gridSize = gridSize || 32;
 
       this._selected = null;
@@ -54,7 +55,7 @@
 
       removeChildren(this._container);
 
-      loadImage(e.target.href).then(img => {
+      this._imageLoader.load(e.target.href).then(img => {
         let canvas = document.createElement('canvas');
         canvas.height = img.naturalHeight;
         canvas.width = img.naturalWidth;
@@ -70,7 +71,7 @@
           let x = e.clientX - rect.left;
           let y = e.clientY - rect.top;
           this._selected = {
-            img: img,
+            img: img.src,
             start: {
               x: Math.floor(x/this._gridSize),
               y: Math.floor(y/this._gridSize)
@@ -129,14 +130,5 @@
   function removeChildren(node) {
     while (node.firstChild)
       node.removeChild(node.firstChild);
-  }
-
-  function loadImage(url) {
-    return new Promise((res, rej) => {
-      let img = new Image();
-      img.addEventListener('load', () => res(img));
-      img.addEventListener('error', rej);
-      img.src = url;
-    });
   }
 })();

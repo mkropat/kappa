@@ -6,10 +6,11 @@
   let gameKeys = ['w', 'a', 's', 'd'];
 
   window.UiController = class UiController {
-    constructor(screen, statusDisplay, tileSelector) {
+    constructor(screen, statusDisplay, tileSelector, imageLoader) {
       this._screen = screen;
       this._statusDisplay = statusDisplay;
       this._tileSelector = tileSelector;
+      this._imageLoader = imageLoader;
 
       this._tiles = {};
 
@@ -63,17 +64,22 @@
         let selectedGridX = Math.floor(absoluteX/gridSize);
         let selectedGridY = Math.floor(absoluteY/gridSize);
 
-        for (let x = 0; x < tile.width/gridSize; x++) {
-          for (let y = 0; y < tile.height/gridSize; y++) {
-            let gridX = selectedGridX + x;
-            let gridY = selectedGridY - y;
-            this._tiles[gridX + ',' + gridY] = {
-              img: tile.img,
-              x: tile.x + x*gridSize,
-              y: tile.y + y*gridSize
-            };
+        var newTiles = {};
+
+        this._imageLoader.load(tile.img).then(img => {
+          for (let x = 0; x < tile.width/gridSize; x++) {
+            for (let y = 0; y < tile.height/gridSize; y++) {
+              let gridX = selectedGridX + x;
+              let gridY = selectedGridY - y;
+
+              this._tiles[gridX + ',' + gridY] = {
+                img: img,
+                x: tile.x + x*gridSize,
+                y: tile.y + y*gridSize
+              };
+            }
           }
-        }
+        });
       });
 
       this._render();
