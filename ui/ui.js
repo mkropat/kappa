@@ -6,13 +6,14 @@
   let gameKeys = ['w', 'a', 's', 'd'];
 
   window.UiController = class UiController {
-    constructor(screen, statusDisplay, tileSelector, imageLoader) {
+    constructor(screen, statusDisplay, tileSelector, imageLoader, socket) {
       this._screen = screen;
       this._statusDisplay = statusDisplay;
       this._tileSelector = tileSelector;
       this._imageLoader = imageLoader;
+      this._socket = socket;
 
-      this._tiles = {};
+      this._tiles = new Map();
 
       this._ctx = screen.getContext('2d');
 
@@ -26,6 +27,15 @@
 
     init() {
       this._screen.focus();
+
+      this._socket.on('set-tiles', newTiles => {
+        Object.keys(newTiles).forEach(position => {
+          this._imageLoader.load(newTiles[position].img).then(img => {
+            newTiles[position].img = img;
+            this._tiles[position] = newTiles[position];
+          });
+        });
+      });
 
       this._screen.addEventListener('keydown', e => {
         if (gameKeys.indexOf(e.key) < 0)
@@ -65,19 +75,24 @@
         let selectedGridY = Math.floor(absoluteY/gridSize);
 
         this._imageLoader.load(tile.img).then(img => {
+          let newTiles = new Map();
+
           for (let x = 0; x < tile.width/gridSize; x++) {
             for (let y = 0; y < tile.height/gridSize; y++) {
               let gridX = selectedGridX + x;
               let gridY = selectedGridY - y;
 
-              this._tiles[gridX + ',' + gridY] = {
-                img: img,
+              newTiles[gridX + ',' + gridY] = {
+                img: img.src,
                 x: tile.x + x*gridSize,
                 y: tile.y + y*gridSize
               };
             }
           }
+
+          socket.emit('set-tiles', newTiles);
         });
+
       });
 
       this._render();

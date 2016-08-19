@@ -25,12 +25,16 @@ app.get('/tiles', function (req, res) {
 var messageHistorySize = 10;
 var messages = [];
 
+var tiles = new Map();
+
 io.on('connection', function (socket) {
   console.log('a user connected');
 
   for (var i = 0; i < messages.length; i++) {
     socket.emit('chat message', messages[i]);
   }
+
+  socket.emit('set-tiles', tiles);
 
   socket.on('chat message', function (msg) {
     console.log('message:', msg);
@@ -40,10 +44,15 @@ io.on('connection', function (socket) {
     io.emit('chat message', msg);
   });
 
-  socket.on('disconnect', function () {
-    console.log('user disconnected');
+  socket.on('set-tiles', newTiles => {
+    Object.keys(newTiles).forEach(position => {
+      tiles[position] = newTiles[position];
+    });
+
+    io.emit('set-tiles', newTiles);
   });
-});
+
+  socket.on('disconnect', function () { console.log('user disconnected'); }); });
 
 let port = 2501;
 http.listen(port, function(){
