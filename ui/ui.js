@@ -124,25 +124,8 @@
         this._cameraX += move;
 
       this._ctx.clearRect(0, 0, this._screen.width, this._screen.height);
+      this._drawTiles();
       this._drawGrid();
-
-      let absoluteStartX = this._cameraX - this._screen.width/2;
-      let absoluteStartY = this._cameraY + this._screen.height/2;
-      let gridStartX = Math.floor(absoluteStartX / gridSize);
-      let gridStartY = Math.floor(absoluteStartY / gridSize);
-
-      for (let y = gridStartY; y > gridStartY - (this._screen.height/gridSize + 1); y--) {
-        for (let x = gridStartX; x < gridStartX + this._screen.width/gridSize + 1; x++) {
-          let tile = this._tiles[x + ',' + y];
-          if (tile) {
-            this._ctx.drawImage(tile.img,
-              tile.x, tile.y, gridSize, gridSize,
-              (x - gridStartX)*gridSize - mod(absoluteStartX, gridSize),
-              (gridStartY - y - 1)*gridSize + mod(absoluteStartY, gridSize),
-              gridSize, gridSize);
-          }
-        }
-      }
 
       this._ctx.save();
       this._ctx.fillStyle = 'rgb(200,0,0)';
@@ -175,6 +158,26 @@
         this._ctx.fillRect(0, y-1, this._screen.width, 3);
 
       this._ctx.restore();
+    }
+
+    _drawTiles() {
+      let absoluteStartX = this._cameraX - this._screen.width/2;
+      let absoluteStartY = this._cameraY + this._screen.height/2;
+      let gridStartX = Math.floor(absoluteStartX / gridSize);
+      let gridStartY = Math.floor(absoluteStartY / gridSize);
+
+      for (let y = gridStartY; y > gridStartY - (this._screen.height/gridSize + 1); y--) {
+        for (let x = gridStartX; x < gridStartX + this._screen.width/gridSize + 1; x++) {
+          let tile = this._tiles[x + ',' + y];
+          if (tile) {
+            this._ctx.drawImage(tile.img,
+              tile.x, tile.y, gridSize, gridSize,
+              (x - gridStartX)*gridSize - mod(absoluteStartX, gridSize),
+              (gridStartY - y - 1)*gridSize + mod(absoluteStartY, gridSize),
+              gridSize, gridSize);
+          }
+        }
+      }
     }
   };
 
