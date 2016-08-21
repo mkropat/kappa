@@ -58,9 +58,13 @@ form button {
   vertical-align: top;
 }
 
-#tilset-image {
+#tileset-image {
   border: 1px solid #000;
   width: 400px;
   height: 300px;
   overflow: scroll;
+}
+
+#tileset-image.selecting {
+  cursor: crosshair;
 }

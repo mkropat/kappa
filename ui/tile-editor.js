@@ -66,6 +66,8 @@
         canvas.addEventListener('mousedown', e => {
           e.preventDefault();
 
+          this._container.classList.add('selecting');
+
           let rect = canvas.getBoundingClientRect();
 
           let x = e.clientX - rect.left;
@@ -82,6 +84,8 @@
         });
 
         canvas.addEventListener('mouseup', e => {
+          this._container.classList.remove('selecting');
+
           let rect = canvas.getBoundingClientRect();
 
           let x = e.clientX - rect.left;
