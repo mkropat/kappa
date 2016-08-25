@@ -90,7 +90,7 @@
             }
           }
 
-          socket.emit('set-tiles', newTiles);
+          this._socket.emit('set-tiles', newTiles);
         });
 
       });

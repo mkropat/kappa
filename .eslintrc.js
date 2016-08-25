@@ -4,6 +4,9 @@ module.exports = {
         "es6": true,
         "node": true
     },
+    "globals": {
+        "React": true
+    },
     "extends": "eslint:recommended",
     "rules": {
         "indent": [
