@@ -26,6 +26,9 @@
 
     <script src="node_modules/react/dist/react.min.js"></script>
     <script src="node_modules/react-dom/dist/react-dom.min.js"></script>
+    <script>
+      window.k = {};
+    </script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="ui/ui.js"></script>
     <script src="ui/chat.js"></script>
@@ -39,27 +42,27 @@
 
   window.socket = io();
 
-  window.chat = new ChatController(
+  window.chat = new k.ChatController(
       socket,
       document.getElementById('chat-messages'),
       document.getElementById('chat-form'));
 
-  window.statusDisplay = new StatusDisplay(
+  window.statusDisplay = new k.StatusDisplay(
       document.getElementById('status-container'));
 
-  window.tileSelector = new TileSelector(
+  window.tileSelector = new k.TileSelector(
       document.getElementById('tileset-list'),
       document.getElementById('tileset-image'),
-      imageLoader);
+      k.imageLoader);
 
-  window.screenController = new UiController(
+  window.screenController = new k.UiController(
       document.getElementById('screen'),
       statusDisplay,
       tileSelector,
-      imageLoader,
+      k.imageLoader,
       socket);
 
-  window.layerSelector = React.createElement(LayerSelector, { socket: socket });
+  window.layerSelector = React.createElement(k.LayerSelector, { socket: socket });
   ReactDOM.render(layerSelector, document.getElementById('layer-selector'));
 
   chat.init();

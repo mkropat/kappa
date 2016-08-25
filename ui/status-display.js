@@ -1,7 +1,7 @@
 (function() {
   'use strict';
 
-  window.StatusDisplay = class StatusDisplay {
+  window.k.StatusDisplay = class StatusDisplay {
     constructor(container) {
       this._ul = document.createElement('ul');
       container.appendChild(this._ul);

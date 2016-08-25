@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  window.TileSelector = class TileSelector {
+  window.k.TileSelector = class TileSelector {
     constructor(list, container, imageLoader, gridSize) {
       this._list = list;
       this._container = container;

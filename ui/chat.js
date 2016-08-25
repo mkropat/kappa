@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  window.ChatController = class ChatController {
+  window.k.ChatController = class ChatController {
     constructor(socket, messageContainer, form) {
       this._socket = socket;
       this._messageContainer = messageContainer;

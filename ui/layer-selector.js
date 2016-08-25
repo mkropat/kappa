@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  window.LayerSelector = class LayerSelector extends React.Component {
+  window.k.LayerSelector = class LayerSelector extends React.Component {
     constructor(props) {
       super(props);
 

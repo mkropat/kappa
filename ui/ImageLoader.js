@@ -1,9 +1,9 @@
 (function () {
   'use strict';
 
-  window.imageLoader = {};
+  window.k.imageLoader = {};
 
-  window.imageLoader.load = function (url) {
+  window.k.imageLoader.load = function (url) {
     return new Promise((res, rej) => {
       let img = new Image();
       img.addEventListener('load', () => res(img));

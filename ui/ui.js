@@ -5,7 +5,7 @@
 
   let gameKeys = ['w', 'a', 's', 'd'];
 
-  window.UiController = class UiController {
+  window.k.UiController = class UiController {
     constructor(screen, statusDisplay, tileSelector, imageLoader, socket) {
       this._screen = screen;
       this._statusDisplay = statusDisplay;
