@@ -10,6 +10,7 @@ var io = require('socket.io')(http);
 
 app.use('/ui', express.static('ui'));
 app.use('/tiles', express.static('tiles'));
+app.use('/node_modules', express.static('node_modules'));
 
 app.get('/', function(req, res) {
   res.sendFile(__dirname + '/index.html');
@@ -27,14 +28,14 @@ var messages = [];
 
 var tiles = new Map();
 
+var layers = [];
+
 io.on('connection', function (socket) {
   console.log('a user connected');
 
   for (var i = 0; i < messages.length; i++) {
     socket.emit('chat message', messages[i]);
   }
-
-  socket.emit('set-tiles', tiles);
 
   socket.on('chat message', function (msg) {
     console.log('message:', msg);
@@ -44,6 +45,13 @@ io.on('connection', function (socket) {
     io.emit('chat message', msg);
   });
 
+  socket.emit('set-layers', layers);
+  socket.on('set-layers', newLayers => {
+    layers = newLayers;
+    io.emit('set-layers', layers);
+  });
+
+  socket.emit('set-tiles', tiles);
   socket.on('set-tiles', newTiles => {
     Object.keys(newTiles).forEach(position => {
       tiles[position] = newTiles[position];

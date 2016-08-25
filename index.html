@@ -16,17 +16,23 @@
     <div class="sidebar">
       <div id="status-container"></div>
 
-      <h3>Tiles</h3>
+      <div id="layer-selector">
+      </div>
+
+      <h3>Tile Editor</h3>
       <ul id="tileset-list"></ul>
       <div id="tileset-image"></div>
     </div>
 
+    <script src="node_modules/react/dist/react.min.js"></script>
+    <script src="node_modules/react-dom/dist/react-dom.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="ui/ui.js"></script>
     <script src="ui/chat.js"></script>
     <script src="ui/tile-editor.js"></script>
     <script src="ui/status-display.js"></script>
     <script src="ui/ImageLoader.js"></script>
+    <script src="ui/layer-selector.js"></script>
     <script>
 (function () {
   'use strict';
@@ -52,6 +58,9 @@
       tileSelector,
       imageLoader,
       socket);
+
+  window.layerSelector = React.createElement(LayerSelector, { socket: socket });
+  ReactDOM.render(layerSelector, document.getElementById('layer-selector'));
 
   chat.init();
   tileSelector.init();
