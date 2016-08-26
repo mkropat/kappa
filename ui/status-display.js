@@ -4,6 +4,7 @@
   window.k.StatusDisplay = class StatusDisplay {
     constructor(container) {
       this._ul = document.createElement('ul');
+      this._ul.classList.add('list-group');
       container.appendChild(this._ul);
 
       this._keyToSpan = {};
@@ -13,6 +14,7 @@
       Object.keys(items).forEach(k => {
         if (!this._keyToSpan[k]) {
           let li = document.createElement('li');
+          li.classList.add('list-group-item');
           li.appendChild(document.createTextNode(k + ': '));
 
           this._keyToSpan[k] = document.createElement('span');

@@ -21,17 +21,27 @@
         </span>
       </form>
     </div>
-    <div class="sidebar">
-      <div id="status-container"></div>
+    <div class="sidebar container">
+      <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active"><a href="#status" role="tab" data-toggle="tab">Status</a></li>
+        <li role="presentation"><a href="#tile-editor" role="tab" data-toggle="tab">Tile Editor</a></li>
+      </ul>
 
-      <div id="layer-selector">
+      <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="status">
+          <div id="status-container"></div>
+        </div>
+        <div role="tabpanel" class="tab-pane" id="tile-editor">
+          <div id="layer-selector"></div>
+
+          <h3>Tile Editor</h3>
+          <ul id="tileset-list"></ul>
+          <div id="tileset-image"></div>
+        </div>
       </div>
-
-      <h3>Tile Editor</h3>
-      <ul id="tileset-list"></ul>
-      <div id="tileset-image"></div>
     </div>
 
+    <script src="node_modules/bootstrap.native/dist/bootstrap-native.min.js"></script>
     <script src="node_modules/react/dist/react.min.js"></script>
     <script src="node_modules/react-dom/dist/react-dom.min.js"></script>
     <script>
