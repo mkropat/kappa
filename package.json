@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "messin around",
   "dependencies": {
+    "bootstrap": "^3.3.7",
     "express": "^4.14.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
@@ -10,9 +11,10 @@
   },
   "scripts": {
     "start": "node index.js",
-    "lint": "eslint ."
+    "lint": "eslint .; bootlint -d W005 index.html"
   },
   "devDependencies": {
+    "bootlint": "^0.14.2",
     "eslint": "^3.3.0"
   }
 }

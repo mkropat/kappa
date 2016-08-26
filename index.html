@@ -1,7 +1,12 @@
 <!doctype html>
 <html>
   <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
     <title>kappa</title>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="ui/ui.css" rel="stylesheet">
   </head>
   <body>
@@ -9,8 +14,11 @@
       <canvas id="screen" width="640" height="480" tabindex="0"></canvas>
 
       <ul id="chat-messages"></ul>
-      <form id="chat-form" action="">
-        <input autocomplete="off" /><button>Send</button>
+      <form id="chat-form" action="" class="input-group">
+        <input class="form-control" autocomplete="off" type="text" />
+        <span class="input-group-btn">
+          <button type="button" class="btn btn-default">Send</button>
+        </span>
       </form>
     </div>
     <div class="sidebar">
